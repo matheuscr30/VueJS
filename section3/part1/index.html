@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VueJS</title>
+    <link rel="stylesheet" href="">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p v-if="show">You can see me!</p>
+        <p v-else>Now you see me</p>
+        <p>Do you also se me?</p>
+        <button @click="show = !show">Change</button>
+    </div>
+
+
+    <script>
+    new Vue({
+        el: '#app',
+        data: {
+            show: true
+        }
+    });
+    </script>
+</body>
+</html>

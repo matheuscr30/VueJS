@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VueJS</title>
+    <link rel="stylesheet" href="">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="(ingredient, index) in ingredients" :key="ingredient">{{ ingredient }} ({{ index }})</li>
+        </ul>
+        <button @click="ingredients.push('spice')">Add new</button>
+        <hr>
+        <ul>
+            <li v-for="person in persons">
+                <div v-for="(value, key, index) in person"> {{ key }}: {{ value }} ({{ index }})</div>
+            </li>
+        </ul>
+        <span v-for="i in 10">{{ i }}</span>
+        <hr>
+        <template v-for="(ingredient, index) in ingredients">
+            <h1>{{ ingredient }}</h1>
+            <p>{{ index }}</p>
+        </template>
+    </div>
+
+    <script>
+    new Vue({
+        el: '#app',
+        data: {
+            ingredients: ['meat', 'fruits', 'cookies'],
+            persons: [
+                {name: 'Max', age: 27, color: 'red'},
+                {name: 'Anna', age: 'unknow', color: 'blue'}
+            ]
+        }
+    });
+    </script>
+</body>
+</html>
