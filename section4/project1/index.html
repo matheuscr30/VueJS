@@ -12,42 +12,133 @@
         <div class="small-6 columns">
             <h1 class="text-center">YOU</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: playerHealth + '%'}">
+                    {{ playerHealth }}
                 </div>
             </div>
         </div>
         <div class="small-6 columns">
             <h1 class="text-center">MONSTER</h1>
             <div class="healthbar">
-                <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: monsterHealth + '%'}">
+                    {{ monsterHealth }}
                 </div>
             </div>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-if="!gameIsRunning">
         <div class="small-12 columns">
-            <button id="start-game">START NEW GAME</button>
+            <button id="start-game" @click="startGame">START NEW GAME</button>
         </div>
     </section>
-    <section class="row controls">
+    <section class="row controls" v-else>
         <div class="small-12 columns">
-            <button id="attack">ATTACK</button>
-            <button id="special-attack">SPECIAL ATTACK</button>
-            <button id="heal">HEAL</button>
-            <button id="give-up">GIVE UP</button>
+            <button id="attack" @click="attack">ATTACK</button>
+            <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
+            <button id="heal" @click="heal">HEAL</button>
+            <button id="give-up" @click="giveUp">GIVE UP</button>
         </div>
     </section>
-    <section class="row log">
+    <section class="row log" v-if="turns.length > 0">
         <div class="small-12 columns">
             <ul>
-                <li>
-
+                <li v-for="turn in turns"
+                    :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">
+                    {{ turn.text }}
                 </li>
             </ul>
         </div>
     </section>
 </div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            gameIsRunning: false,
+            monsterHealth: 100,
+            playerHealth: 100,
+            turns: []
+        },
+        methods: {
+            startGame: function(){
+                this.monsterHealth = 100;
+                this.playerHealth = 100;
+                this.gameIsRunning = true;
+                this.turns = [];
+            },
+            attack: function(){
+                let damage = this.calculateDamage(3, 10);
+                this.monsterHealth -= damage;
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'Player hits monster for ' + damage
+                });
+                if(this.checkWin()) return;
+                this.monsterAttack();
+            },
+            specialAttack: function(){
+                let damage = this.calculateDamage(10, 20);
+                this.monsterHealth -= damage;
+                this.turns.unshift({
+                    isPlayer: true,
+                    text: 'Player hits monster hard for ' + damage
+                });
+                if(this.checkWin()) return;
+                this.monsterAttack();
+            },
+            monsterAttack: function(){
+                var damage = this.calculateDamage(5, 12);
+                this.playerHealth -= damage;
+                this.turns.unshift({
+                    isPlayer: false,
+                    text: 'Monster hits player for ' + damage
+                });
+                this.checkWin();
+            },
+            heal: function(){
+                if(this.playerHealth <= 90)
+                    this.playerHealth += 10;
+                else
+                    this.playerHealth = 100;
+                    this.turns.unshift({
+                        isPlayer: true,
+                        text: 'Player heals for 10'
+                    });
+                this.monsterAttack();
+            },
+            giveUp: function(){
+                this.gameIsRunning = false;
+            },
+            calculateDamage: function(min, max){
+                return Math.max(Math.floor(Math.random() * max) + 1, min);
+            },
+            checkWin: function(){
+                if(this.monsterHealth <= 0){
+                    if(confirm("You won! New Game?")){
+                        this.startGame();
+                    } else {
+                        this.gameIsRunning = false;
+                    }
+                    return true;
+                } else if (this.playerHealth <= 0){
+                    if(confirm("You lost! New Game?")){
+                        this.startGame();
+                    } else {
+                        this.gameIsRunning = false;
+                    }
+                    return true;
+                }
+                return false;
+            }
+        }
+    });
+</script>
 </body>
 </html>
