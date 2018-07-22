@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VueJS</title>
+    <link rel="stylesheet" href="">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <button @click="title = 'Changed'">Update Title</button>
+        <button @click="destroy">Destroy</button>
+    </div>
+
+    <script>
+    new Vue({
+        el: '#app',
+        data: {
+            title: 'The VueJS Instance'
+        },
+        beforeCreate: function() {
+            console.log('beforeCreate()');
+        },
+        created: function() {
+            console.log('created()');
+        },
+        beforeMount: function() {
+            console.log('beforeMount()');
+        },
+        mounted: function() {
+            console.log('mounted()');
+        },
+        beforeUpdate: function() {
+            console.log('beforeUpdate()');
+        },
+        updated: function() {
+            console.log('updated()');
+        },
+        beforeDestroy: function() {
+            console.log('beforeDestroy()');
+        },
+        destroyed: function() {
+            console.log('destroyed()');
+        },
+        methods: {
+            destroy: function() {
+                this.$destroy();
+            }
+        }
+    });
+    </script>
+</body>
+</html>
