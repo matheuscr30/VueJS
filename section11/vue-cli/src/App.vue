@@ -1,60 +1,170 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+  <div class="container">
+    <form>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+          <h1>File a Complaint</h1>
+          <hr>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input
+              type="text"
+              id="email"
+              class="form-control"
+              v-model="userData.email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              v-model.lazy="userData.password">
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input
+              type="number"
+              id="age"
+              class="form-control"
+              v-model="userData.age">
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 form-group">
+          <label for="message">Message</label><br>
+          <!-- Interpolation between <textarea>{{ test }}</textarea> doesn't work!-->
+          <textarea
+            id="message"
+            rows="5"
+            class="form-control"
+            v-model="message"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+          <div class="form-group">
+            <label for="sendmail">
+              <input
+                type="checkbox"
+                id="sendmail"
+                value="SendMail"
+                v-model="sendMail"> Send Mail
+            </label>
+            <label for="sendInfomail">
+              <input
+                type="checkbox"
+                id="sendInfomail"
+                value="SendInfoMail"
+                v-model="sendMail"> Send Infomail
+            </label>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 form-group">
+          <label for="male">
+            <input
+              type="radio"
+              id="male"
+              value="Male"
+              v-model="gender"> Male
+          </label>
+          <label for="female">
+            <input
+              type="radio"
+              id="female"
+              value="Female"
+              v-model="gender"> Female
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
+          <label for="priority">Priority</label>
+          <select
+            id="priority"
+            class="form-control"
+            v-model="selectedPriority">
+            <option v-for="priority in priorities">{{ priority }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+          <app-switch v-model="dataSwitch"></app-switch>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+          <button
+            class="btn btn-primary"
+            @click.prevent="submitted">Submit!
+          </button>
+        </div>
+      </div>
+    </form>
+    <hr>
+    <div class="row" v-if="isSubmitted">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>Your Data</h4>
+          </div>
+          <div class="panel-body">
+            <p>Mail: {{ userData.email }}</p>
+            <p>Password: {{ userData.password }}</p>
+            <p>Age: {{ userData.age }}</p>
+            <p style="white-space: pre;">Message: {{ message }}</p>
+            <p><strong>Send Mail?</strong></p>
+            <ul>
+              <li v-for="item in sendMail">{{ item }}</li>
+            </ul>
+            <p>Gender: {{ gender }}</p>
+            <p>Priority: {{ selectedPriority }}</p>
+            <p>Switched: {{ dataSwitch }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import Switch from './Switch';
+
+  export default {
+    data: function(){
+      return {
+        userData: {
+          email: '',
+          password: '',
+          age: 19
+        },
+        message: 'A new text',
+        sendMail: [],
+        gender: 'Male',
+        priorities: ['High', 'Medium', 'Low'],
+        selectedPriority: 'High',
+        dataSwitch: true,
+        isSubmitted: false
+      };
+    },
+    methods: {
+      submitted(){
+          this.isSubmitted = true;
+      }
+    },
+    components: {
+      'app-switch': Switch
     }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
