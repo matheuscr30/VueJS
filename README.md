@@ -1,6 +1,6 @@
 # VueJs
 
-:books: &nbsp; Studies about Javascript and VueJs
+:books: &nbsp; Studies about Javascript and VueJs (incl. Vue Router & Vuex)
 
 ## Authors
 
